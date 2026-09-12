@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAWIT360 Prototype</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7f2;color:#18301f}
+header{background:#173d24;color:white;padding:18px 20px;position:sticky;top:0;z-index:2}
+header h1{margin:0;font-size:22px}header p{margin:5px 0 0;opacity:.8;font-size:13px}
+nav{display:flex;gap:7px;overflow:auto;padding:10px;background:white;border-bottom:1px solid #ddd;position:sticky;top:74px;z-index:2}
+nav button{border:0;background:#eef3ed;padding:10px 13px;border-radius:10px;white-space:nowrap;color:#23432b;font-weight:600}
+nav button.active{background:#173d24;color:#fff}
+main{max-width:1100px;margin:auto;padding:18px}.tab{display:none}.tab.active{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.card{background:white;border:1px solid #dde5db;border-radius:14px;padding:16px;box-shadow:0 2px 7px #00000008}
+.kpi{font-size:25px;font-weight:700;margin-top:7px}.muted{color:#718074;font-size:13px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:14px}
+table{width:100%;border-collapse:collapse;background:white;border-radius:12px;overflow:hidden}th,td{padding:11px;border-bottom:1px solid #e6ebe4;text-align:left;font-size:13px}th{background:#edf3eb}
+input,select{width:100%;padding:10px;border:1px solid #cdd8cb;border-radius:9px;margin:5px 0 10px}button.primary{background:#1f6b36;color:white;border:0;padding:10px 14px;border-radius:9px;font-weight:700}
+.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#e7f2e8;font-size:11px}.warn{background:#fff0d5}.danger{background:#fde4e4}
+h2{margin-top:5px}h3{margin-bottom:8px}.section{margin-top:18px}
+.ai{background:#173d24;color:white;border-radius:15px;padding:18px}.ai button{background:white;color:#173d24;border:0;padding:9px 12px;border-radius:8px;margin:4px}
+.small{font-size:12px}
+</style>
+</head>
+<body>
+<header><h1>🌴 SAWIT360</h1><p>Prototype ekosistem perkebunan kelapa sawit — kebun, petani, pupuk, panen, utang & AI</p></header>
+<nav id="nav"></nav>
+<main>
+
+<section id="dashboard" class="tab active">
+<h2>Dashboard</h2>
+<div class="cards">
+<div class="card"><div class="muted">Kebun sendiri</div><div class="kpi">17 ha</div></div>
+<div class="card"><div class="muted">Petani mitra</div><div class="kpi">50</div></div>
+<div class="card"><div class="muted">Areal mitra</div><div class="kpi">30 ha</div></div>
+<div class="card"><div class="muted">Utang pupuk berjalan</div><div class="kpi">Rp35 jt</div></div>
+</div>
+<div class="grid2">
+<div class="card"><h3>📅 Agenda minggu ini</h3>
+<table><tr><th>Hari</th><th>Petani</th><th>Estimasi</th></tr>
+<tr><td>Senin</td><td>Budi, Andi</td><td>3,4 ton</td></tr>
+<tr><td>Rabu</td><td>Joko, Rudi</td><td>2,8 ton</td></tr>
+<tr><td>Jumat</td><td>Slamet, Udin</td><td>4,1 ton</td></tr></table></div>
+<div class="ai"><h3>🤖 AI Assistant</h3><p>Data demo menunjukkan target 10 ton/hari belum penuh pada beberapa hari. Prioritaskan petani dengan jadwal panen terdekat.</p>
+<button onclick="alert('AI: untuk rekomendasi pupuk nyata, masukkan umur tanaman, analisis tanah/daun, target produksi dan jenis tanah.')">Analisis pupuk</button>
+<button onclick="alert('AI: estimasi sederhana berdasarkan jadwal demo: 10,3 ton minggu ini.')">Prediksi TBS</button></div>
+</div>
+</section>
+
+<section id="kebun" class="tab"><h2>🌴 Data Kebun</h2>
+<div class="card"><h3>Tambah/ubah kebun</h3>
+<label>Pemilik<input id="owner" placeholder="Nama pemilik"></label>
+<label>Luas (ha)<input id="area" type="number" step="0.1" placeholder="3.5"></label>
+<label>Tahun tanam<input id="year" type="number" placeholder="2023"></label>
+<label>pH tanah<input id="ph" type="number" step="0.1" placeholder="4.5"></label>
+<button class="primary" onclick="addFarm()">Simpan kebun</button></div>
+<div class="section"><table id="farmTable"><tr><th>Pemilik</th><th>Luas</th><th>Umur</th><th>pH</th><th>Status</th></tr></table></div>
+</section>
+
+<section id="petani" class="tab"><h2>👨‍🌾 Petani Mitra</h2>
+<table><tr><th>ID</th><th>Nama</th><th>Luas</th><th>Panen</th><th>Utang</th></tr>
+<tr><td>P027</td><td>Budi</td><td>3,5 ha</td><td>Kamis</td><td>Rp1.300.000</td></tr>
+<tr><td>P031</td><td>Andi</td><td>2,0 ha</td><td>Senin</td><td>Rp800.000</td></tr>
+<tr><td>P044</td><td>Joko</td><td>4,0 ha</td><td>Rabu</td><td>Rp2.100.000</td></tr>
+</table></section>
+
+<section id="panen" class="tab"><h2>🚚 Jadwal & Transaksi Panen</h2>
+<div class="card"><h3>Input panen</h3>
+<label>Petani<select id="harvestFarmer"><option>Budi</option><option>Andi</option><option>Joko</option></select></label>
+<label>Berat TBS (kg)<input id="weight" type="number" placeholder="1800"></label>
+<label>Harga beli/kg<input id="price" type="number" value="2100"></label>
+<button class="primary" onclick="calcHarvest()">Hitung</button>
+<div id="harvestResult" class="section"></div></div>
+<div class="section"><table><tr><th>Tanggal</th><th>Petani</th><th>Kg</th><th>Nilai TBS</th></tr>
+<tr><td>09 Sep</td><td>Budi</td><td>1.820</td><td>Rp3.822.000</td></tr></table></div>
+</section>
+
+<section id="pupuk" class="tab"><h2>🧪 Tanah & Pemupukan</h2>
+<div class="card"><p><b>Catatan penting:</b> aplikasi memberikan rekomendasi berbasis data; dosis final perlu mengikuti hasil analisis tanah/daun dan rekomendasi agronomis.</p>
+<table><tr><th>Bulan</th><th>Kegiatan</th><th>Status</th></tr>
+<tr><td>Feb</td><td>Pemupukan putaran 1</td><td><span class="badge">Terjadwal</span></td></tr>
+<tr><td>Apr</td><td>Pemupukan putaran 2</td><td><span class="badge">Terjadwal</span></td></tr>
+<tr><td>Jun</td><td>Evaluasi tanah/daun + koreksi bila perlu</td><td><span class="badge warn">Periksa</span></td></tr>
+<tr><td>Aug</td><td>Pemupukan putaran 3</td><td><span class="badge">Terjadwal</span></td></tr>
+<tr><td>Oct</td><td>Pemupukan putaran 4</td><td><span class="badge">Terjadwal</span></td></tr>
+</table></div>
+</section>
+
+<section id="utang" class="tab"><h2>💰 Utang Pupuk Petani</h2>
+<table><tr><th>Petani</th><th>Utang awal</th><th>Potongan</th><th>Sisa</th></tr>
+<tr><td>Budi</td><td>Rp2.300.000</td><td>Rp1.000.000</td><td><b>Rp1.300.000</b></td></tr>
+<tr><td>Andi</td><td>Rp1.200.000</td><td>Rp400.000</td><td><b>Rp800.000</b></td></tr>
+<tr><td>Joko</td><td>Rp2.500.000</td><td>Rp400.000</td><td><b>Rp2.100.000</b></td></tr></table>
+</section>
+
+<section id="ai" class="tab"><h2>🤖 AI Sawit</h2>
+<div class="ai"><h3>Perintah contoh</h3>
+<p>“Analisis kebun saya.”</p><p>“Petani mana yang akan panen minggu depan?”</p><p>“Berapa kebutuhan pupuk berdasarkan data kebun?”</p><p>“Apakah volume TBS cukup untuk satu truk 10 ton?”</p>
+<button onclick="alert('Prototype AI: fitur ini nantinya membaca database kebun, petani, panen, pupuk dan utang secara otomatis.')">Jalankan analisis</button></div>
+</section>
+
+</main>
+<script>
+const tabs=[['dashboard','🏠 Dashboard'],['kebun','🌴 Kebun'],['petani','👨‍🌾 Petani'],['panen','🚚 Panen'],['pupuk','🧪 Pupuk & Tanah'],['utang','💰 Utang'],['ai','🤖 AI']];
+const nav=document.getElementById('nav');
+tabs.forEach((t,i)=>{let b=document.createElement('button');b.textContent=t[1];b.onclick=()=>show(t[0],b);if(i===0)b.className='active';nav.appendChild(b)});
+function show(id,b){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+function addFarm(){let o=document.getElementById('owner').value||'Demo';let a=+document.getElementById('area').value||0;let y=+document.getElementById('year').value||new Date().getFullYear();let p=+document.getElementById('ph').value||0;let age=new Date().getFullYear()-y;let status=age<4?'Belum/awal menghasilkan':'Menghasilkan';document.getElementById('farmTable').insertAdjacentHTML('beforeend',`<tr><td>${o}</td><td>${a} ha</td><td>${age} th</td><td>${p}</td><td>${status}</td></tr>`)}
+function calcHarvest(){let w=+document.getElementById('weight').value||0;let p=+document.getElementById('price').value||0;let total=w*p;document.getElementById('harvestResult').innerHTML=`<b>Nilai TBS: Rp${total.toLocaleString('id-ID')}</b><br><span class="small">Versi berikutnya akan otomatis menghitung potongan utang dan nilai bersih petani.</span>`}
+</script>
+</body></html>
